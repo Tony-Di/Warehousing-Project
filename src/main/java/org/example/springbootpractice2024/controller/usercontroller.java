@@ -25,11 +25,12 @@ public class usercontroller {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> addUser(@RequestBody FormData formData) {
+    public ResponseEntity<String> login(@RequestBody FormData formData) {
         System.out.println("Received form data: " + "user password:" + formData.password + "username: " + formData.username);
 
         // check if the username exist in the databse
         if (LoginService.getUserByName(formData.username) == null) {
+
             return ResponseEntity.badRequest().body("User not found");
         }
         // check if the password matched
@@ -38,11 +39,23 @@ public class usercontroller {
         }
         // both matched then login and redirect to associated webpage with user information
         else {
-            String redirectUrl = "/userpage/" + LoginService.getUserByName(formData.username).getUser_id();
+            String redirectUrl;
+            if(formData.username.equals("admin"))
+            {
+                redirectUrl = "/admin";
+            }
+            else {
+                redirectUrl = "/userpage/" + LoginService.getUserByName(formData.username).getlogin_id();
+
+            }
             return ResponseEntity.ok().body("{\"message\":\"Form data received successfully!\", \"redirect\":\"" + redirectUrl + "\"}");
         }
     }
-
+    @PostMapping("/adduser")
+    public ResponseEntity<String> adduser(@RequestBody User user) {
+        userService.saveUser(user);
+        return ResponseEntity.ok("User added successfully");
+    }
     @GetMapping("/userpage/{id}")
     public ResponseEntity<String> getUserById(@PathVariable int id) {
         User userData = userService.getUserById(id);
@@ -55,6 +68,13 @@ public class usercontroller {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/allusers")
+    public ResponseEntity<List<User>> getAllusers() {
+        List<User> usersList = userService.getAllUsers();
+        return ResponseEntity.ok(usersList);
+    }
+
     // class defined a form object with username and password
     private static class FormData {
         private String username;

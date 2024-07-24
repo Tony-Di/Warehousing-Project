@@ -7,12 +7,12 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Table(name = "login")
 public class login {
     @Id
-    @Column(name = "user_id")
+    @Column(name = "login_id")
     @GeneratedValue(strategy = IDENTITY)
-    private int user_id;
+    private int loginid;
 
     @OneToOne
-    @JoinColumn(name = "user_info_id", referencedColumnName = "id")
+    @JoinColumn(name = "personal_information_id", referencedColumnName = "personal_information_id")
     private User userInformation;
 
     @Column(name ="username")
@@ -21,8 +21,8 @@ public class login {
     @Column(name = "password")
     private String password;
 
-    public int getUser_id() {
-        return user_id;
+    public int getlogin_id() {
+        return loginid;
     }
 
     public String getUsername() {

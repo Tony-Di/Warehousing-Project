@@ -13,6 +13,6 @@ public class loginServiceImpl implements loginService{
 
     @Override
     public login getUserByName(String username) {
-        return loginRepo.findByUsername(username);
+        return loginRepo.findByusername(username);
     }
 }

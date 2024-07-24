@@ -5,13 +5,13 @@ import jakarta.persistence.*;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Table(name = "users_information")
+@Table(name = "personal_information")
 public class User {
     @Id
-    @Column(name = "id")
+    @Column(name = "personal_information_id")
     @GeneratedValue(strategy = IDENTITY)
 
-    private int id;
+    private int personalinformationid;
 
     @Column(name ="name")
     private String name;
@@ -26,7 +26,7 @@ public class User {
     private String position;
 
     public int getId() {
-        return id;
+        return personalinformationid;
     }
 
     public String getName() {
