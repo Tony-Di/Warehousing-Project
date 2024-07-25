@@ -33,4 +33,80 @@ public class ShelveServiceImpl implements ShelveService {
            return true;
        }
     }
+
+    @Override
+    @Transactional
+    public boolean updateShelfdatails(int shelfId, String nameofgoods, int priceofgoods,String locationofshelf,String newnameofgoods) {
+        if(nameofgoods.equals("null"))
+        {
+            List<shelves> shelveslist = repo.findByshelvesId(shelfId);
+            for(int i =0;i<shelveslist.size();i++)
+            {
+                if(shelveslist.get(i).getName_of_goods() == null)
+                {
+                    shelves shelf = shelveslist.get(i);
+                    shelf.setNameofgoods(newnameofgoods);
+                    shelf.setPriceofgoods(priceofgoods);
+                    shelf.setLocationofshelves(repo.findByshelvesId(shelfId).get(0).getLocation_of_shelves());
+                    shelf.setShelvesId(shelfId);
+                    repo.save(shelf);
+                }
+            }
+            return true;
+        }
+        shelves shelf = repo.findByshelvesIdAndNameofgoods(shelfId,nameofgoods);
+        if(shelf==null)
+        {
+            return false;
+        }
+        else {
+            if(!nameofgoods.isEmpty())
+            {
+                shelf.setNameofgoods(newnameofgoods);
+            }
+            if(!locationofshelf.isEmpty())
+            {
+                shelf.setLocationofshelves(locationofshelf);
+            }
+            shelf.setPriceofgoods(priceofgoods);
+            repo.save(shelf);
+            return true;
+        }
+    }
+
+    @Override
+    @Transactional
+    public boolean updateShelfGoods(int shelfId, String nameofgoods, int priceofgoods) {
+        shelves shelf = repo.findByshelvesIdAndNameofgoods(shelfId,nameofgoods);
+        if(shelf==null)
+        {
+            // If no such good exists, create a new record
+            shelf = new shelves();
+            shelf.setShelvesId(shelfId);
+            shelf.setNameofgoods(nameofgoods);
+            shelf.setPriceofgoods(priceofgoods);
+            List<shelves> s = (List<shelves>) repo.findByshelvesId(shelfId);
+            shelf.setLocationofshelves(s.get(0).getLocation_of_shelves());
+        }
+        else {
+            if(!nameofgoods.isEmpty())
+            {
+                shelf.setNameofgoods(nameofgoods);
+            }
+            shelf.setPriceofgoods(priceofgoods);
+        }
+        repo.save(shelf);
+        return true;
+    }
+    public int getNextShelvesId() {
+        Integer maxShelvesId = repo.findMaxShelvesId();
+        return (maxShelvesId != null ? maxShelvesId + 1 : 1);
+    }
+    @Override
+    @Transactional
+    public void saveShelf(shelves shelf) {
+        shelf.setShelvesId(getNextShelvesId());
+        shelf.setNameofgoods(null);
+        repo.save(shelf);
+    }
 }

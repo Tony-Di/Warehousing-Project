@@ -8,8 +8,11 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Table(name="shelves")
 public class shelves {
     @Id
-    @Column(name = "shelves_id")
+    @Column(name = "id")
     @GeneratedValue(strategy = IDENTITY)
+    private int id;
+
+    @Column(name = "shelves_id")
     private int shelvesId;
 
     @Column(name ="name_of_goods")
@@ -23,6 +26,10 @@ public class shelves {
 
     @Column(name = "location_of_shelves")
     private String locationofshelves;
+
+    public int getId() {
+        return id;
+    }
 
     public int getShelvesId() {
         return shelvesId;
@@ -44,7 +51,23 @@ public class shelves {
         return locationofshelves;
     }
 
+    public void setShelvesId(int shelvesId) {
+        this.shelvesId = shelvesId;
+    }
+
     public void setCountofgoods(int countofgoods) {
         this.countofgoods = countofgoods;
+    }
+
+    public void setNameofgoods(String nameofgoods) {
+        this.nameofgoods = nameofgoods;
+    }
+
+    public void setPriceofgoods(int priceofgoods) {
+        this.priceofgoods = priceofgoods;
+    }
+
+    public void setLocationofshelves(String locationofshelves) {
+        this.locationofshelves = locationofshelves;
     }
 }
