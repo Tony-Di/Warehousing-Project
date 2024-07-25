@@ -22,10 +22,15 @@
   </table>
 
   <form @submit.prevent="addUser">
-    <input type="text" v-model="newUser.name" placeholder="Name">
-    <input type="number" v-model="newUser.age" placeholder="Age">
-    <input type="text" v-model="newUser.gender" placeholder="Gender">
-    <input type="text" v-model="newUser.position" placeholder="Position">
+    <input type="text" required v-model="newUser.name" placeholder="Name">
+    <input type="number" required v-model="newUser.age" placeholder="Age">
+    <input type="text" required v-model="newUser.gender" placeholder="Gender">
+    <select v-model="newUser.position" required>
+      <option disabled value="">Select a Position</option>
+      <option>manager</option>
+      <option>stockinEmployee</option>
+      <option>stockoutEmployee</option>
+    </select>
     <button type="submit">Add User</button>
   </form>
 </template>
