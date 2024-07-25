@@ -21,7 +21,6 @@
       </tr>
       </tbody>
     </table>
-    <button type="submit">Submit</button>
   </form>
 </template>
 

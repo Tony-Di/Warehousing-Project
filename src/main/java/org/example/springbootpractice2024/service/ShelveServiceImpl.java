@@ -98,6 +98,7 @@ public class ShelveServiceImpl implements ShelveService {
         repo.save(shelf);
         return true;
     }
+    @Transactional
     public int getNextShelvesId() {
         Integer maxShelvesId = repo.findMaxShelvesId();
         return (maxShelvesId != null ? maxShelvesId + 1 : 1);
