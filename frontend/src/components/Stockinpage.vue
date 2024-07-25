@@ -11,7 +11,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="item in items" :key="item.id">
+      <tr v-for="item in sorteditemsData" :key="item.id">
         <td>{{ item.shelvesId }}</td>
         <td>{{ item.location_of_shelves }}</td>
         <td>{{ item.name_of_goods }}</td>
@@ -21,7 +21,6 @@
       </tr>
       </tbody>
     </table>
-    <button type="submit">Submit</button>
   </form>
 </template>
 
@@ -38,6 +37,12 @@ export default {
       items:[],
     };
   },
+computed: {
+  // Computed property to sort shelfData by shelvesId
+  sorteditemsData() {
+    return [...this.items].sort((a, b) => a.shelvesId - b.shelvesId);
+  }
+},
   created() {
     this.fetchData();
   },

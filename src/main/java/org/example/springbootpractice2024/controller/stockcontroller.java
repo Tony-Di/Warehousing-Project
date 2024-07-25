@@ -23,7 +23,7 @@ public class stockcontroller {
         return ResponseEntity.ok(localdata);
     }
 
-    @PostMapping("/increase-quantity/{shelvesId}/{nameofgoods}/{newquantity}")
+    @PostMapping("/update-quantity/{shelvesId}/{nameofgoods}/{newquantity}")
     public ResponseEntity<String> updatequantity(@PathVariable int shelvesId, @PathVariable String nameofgoods,@PathVariable int newquantity) {
         try {
             boolean updated = shelveService.updatequantity(shelvesId, nameofgoods, newquantity);
