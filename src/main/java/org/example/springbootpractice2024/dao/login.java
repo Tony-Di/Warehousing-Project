@@ -36,4 +36,16 @@ public class login {
     public User getUserInformation() {
         return userInformation;
     }
+
+    public void setUserInformation(User userInformation) {
+        this.userInformation = userInformation;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
