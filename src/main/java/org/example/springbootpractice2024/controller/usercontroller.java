@@ -44,6 +44,18 @@ public class usercontroller {
             {
                 redirectUrl = "/admin";
             }
+            else if(formData.username.equals("stockinEmployee"))
+            {
+                redirectUrl = "/Stockin";
+            }
+            else if(formData.username.equals("stockoutEmployee"))
+            {
+                redirectUrl = "/Stockout";
+            }
+            else if(formData.username.equals("manager"))
+            {
+                redirectUrl = "/Manager";
+            }
             else {
                 redirectUrl = "/userpage/" + LoginService.getUserByName(formData.username).getlogin_id();
 
