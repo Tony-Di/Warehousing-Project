@@ -1,5 +1,12 @@
 
 <template>
+  <p>Welcome to admin page</p>
+  <button @click="logout">Logout</button>
+  <nav>
+    <a href="/stockin" style="margin-right: 20px;">stockin</a>
+    <a href="/stockout" style="margin-right: 20px;">stockout</a>
+    <a href="/manager" style="margin-right: 20px;">manager</a>
+  </nav>
   <table cellspacing="30">
     <thead>
     <tr>
@@ -37,6 +44,7 @@
 
 <script>
 import axios from 'axios';
+import {jwtDecode} from "jwt-decode";
 export default {
   data() {
     return {
@@ -50,10 +58,42 @@ export default {
     };
   },
   created() {
-    this.fetchUserData();
+    this.checkRole();
   },
   methods: {
+    checkRole(){
+      const token = localStorage.getItem('token');
+      if(token)
+      {
+        const decoded = jwtDecode(token);
+        if ( decoded.role !== 'administration') {
+          console.error("Role does not match required permissions.");
+          this.$router.push("/login")
+        }
+        else
+        {
+          this.fetchUserData()
+        }
+      }
+      else
+      {
+        console.error("Role does not match required permissions.");
+        this.$router.push('/login');
+      }
+    },
     fetchUserData() {
+      const token = localStorage.getItem('token');
+      if(token)
+      {
+        const decoded = jwtDecode(token);
+        if (decoded.role !== 'administration') {
+          this.$router.push("/login")
+        }
+      }
+      else
+      {
+        this.$router.push('/login');
+      }
       axios.get(`http://localhost:8080/allusers`)
           .then(response => {
             this.userData = response.data;
@@ -84,6 +124,10 @@ export default {
         this.newUser = { name: '', age: '', gender: '', position: '' };
       }
 
+    },
+    logout() {
+      localStorage.removeItem('token');  // Remove the token
+      this.$router.push('/login');  // Redirect to login page
     }
   }
 }

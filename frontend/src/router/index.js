@@ -13,7 +13,7 @@ const routes = [
     {path:"/Stockout", component:Stockout},
     {path:"/Manager", component:Manager},
     {path:"/Admin", component:Admin},
-
+    {path:"/User", component:User},
 ]
 
 

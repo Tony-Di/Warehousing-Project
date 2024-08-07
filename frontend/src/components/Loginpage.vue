@@ -21,8 +21,10 @@ export default {
   },
   methods: {
     submitForm() {
+
       axios.post('http://localhost:8080/login', this.formData)
           .then(response => {
+            localStorage.setItem('token', response.data.token);
               // redirect to associated web page
               window.location.href = response.data.redirect;
           })

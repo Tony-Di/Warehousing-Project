@@ -6,12 +6,14 @@
 <script>
 
 import Loginpage from "@/components/Loginpage.vue";
-
+import axios from "axios";
+import {jwtDecode} from 'jwt-decode';
 export default {
   name: 'App',
   components: {
     Loginpage
-  }
+  },
+
 }
 </script>
 

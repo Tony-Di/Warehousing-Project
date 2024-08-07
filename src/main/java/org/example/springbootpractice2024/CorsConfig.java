@@ -11,9 +11,9 @@ public class CorsConfig implements WebMvcConfigurer {
     // redirect webs for different origins server side is on port 8080 front end is on port 8081
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // Applies CORS to all routes
-                .allowedOrigins("http://localhost:8081") // Allow this origin to access API
+                .allowedOrigins("*") // Allow this origin to access API
                 .allowedMethods("GET", "POST", "PUT", "DELETE") // Methods allowed
-                .allowedHeaders("*") // All headers allowed
-                .allowCredentials(true); // Allow credentials for authentication
+                .allowedHeaders("*"); // All headers allowed
+//                .allowCredentials(true); // Allow credentials for authentication
     }
 }

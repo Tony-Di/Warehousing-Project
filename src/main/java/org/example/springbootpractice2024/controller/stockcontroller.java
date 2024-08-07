@@ -65,5 +65,9 @@ public class stockcontroller {
         shelveService.updateShelfGoods(shelvesId,nameofgoods,priceofgoods);
         return ResponseEntity.ok("Goods added successfully");
     }
+//    @PostMapping("/checkToken/{token}")
+//    public ResponseEntity<String> checkToken( @PathVariable String token) {
+//
+//    }
 
 }

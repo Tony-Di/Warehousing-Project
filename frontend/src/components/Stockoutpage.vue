@@ -1,4 +1,6 @@
 <template>
+  <p>Welcome to stockout page</p>
+  <button @click="logout">Logout</button>
   <form @submit.prevent="submitForm">
     <table cellspacing="30">
       <thead>
@@ -26,6 +28,7 @@
 
 <script>
 import axios from "axios";
+import {jwtDecode} from "jwt-decode";
 
 export default {
   data() {
@@ -38,7 +41,7 @@ export default {
     };
   },
   created() {
-    this.fetchData();
+    this.checkRole();
   },
   computed: {
     // Computed property to sort shelfData by shelvesId
@@ -47,6 +50,26 @@ export default {
     }
   },
   methods: {
+    checkRole(){
+      const token = localStorage.getItem('token');
+      if(token)
+      {
+        const decoded = jwtDecode(token);
+        if (decoded.role !== 'stockoutEmployee' && decoded.role !== 'administration') {
+          console.error("Role does not match required permissions.");
+          this.$router.push("/login")
+        }
+        else
+        {
+          this.fetchData()
+        }
+      }
+      else
+      {
+        console.error("Role does not match required permissions.");
+        this.$router.push('/login');
+      }
+    },
     fetchData() {
       axios.get('http://localhost:8080/instock')
           .then(response => {
@@ -78,6 +101,10 @@ export default {
         alert('New quantity must be less than the original quantity. And value must be bigger or equal to 0');
         item.count_of_goods = item.original_count_of_goods;
       }
+    },
+    logout() {
+      localStorage.removeItem('token');  // Remove the token
+      this.$router.push('/login');  // Redirect to login page
     }
   }
 }

@@ -1,4 +1,6 @@
 <template>
+  <p>Welcome to stockin page</p>
+  <button @click="logout">Logout</button>
   <form @submit.prevent="submitForm">
     <table cellspacing="30">
       <thead>
@@ -26,7 +28,7 @@
 
 <script>
 import axios from "axios";
-
+import {jwtDecode} from 'jwt-decode';
 export default {
   data() {
     return {
@@ -44,10 +46,31 @@ computed: {
   }
 },
   created() {
-    this.fetchData();
+    this.checkRole();
   },
   methods: {
+    checkRole(){
+      const token = localStorage.getItem('token');
+      if(token)
+      {
+        const decoded = jwtDecode(token);
+        if (decoded.role !== 'stockinEmployee' && decoded.role !== 'administration') {
+          console.error("Role does not match required permissions.");
+          this.$router.push("/login")
+        }
+        else
+        {
+          this.fetchData()
+        }
+      }
+      else
+      {
+        console.error("Role does not match required permissions.");
+        this.$router.push('/login');
+      }
+    },
     fetchData() {
+
       axios.get('http://localhost:8080/instock')
           .then(response => {
             this.items = response.data.map(item => ({
@@ -59,9 +82,7 @@ computed: {
             console.error('Error fetching data: ', error);
           });
     },
-    submitForm() {
 
-    },
     updateQuantity(item) {
       if (item.count_of_goods > item.original_count_of_goods) {
         axios.post(`http://localhost:8080/update-quantity/${item.shelvesId}/${item.name_of_goods}/${item.count_of_goods}`)
@@ -78,6 +99,10 @@ computed: {
         alert('New quantity must be greater than the original quantity.');
         item.count_of_goods = item.original_count_of_goods;
       }
+    },
+    logout() {
+      localStorage.removeItem('token');  // Remove the token
+      this.$router.push('/login');  // Redirect to login page
     }
   }
 }

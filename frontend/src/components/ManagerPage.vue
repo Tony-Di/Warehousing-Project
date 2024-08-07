@@ -1,5 +1,6 @@
 <template>
   <p>Welcome to manager page</p>
+  <button @click="logout">Logout</button>
   <table>
     <thead>
     <tr>
@@ -43,6 +44,7 @@
 
 <script>
 import axios from 'axios';
+import {jwtDecode} from "jwt-decode";
 export default {
   data() {
     return {
@@ -74,10 +76,31 @@ export default {
     }
   },
   created() {
-    this.fetchShelfData();
+    this.checkRole();
   },
   methods: {
+    checkRole(){
+      const token = localStorage.getItem('token');
+      if(token)
+      {
+        const decoded = jwtDecode(token);
+        if (decoded.role !== 'manager' && decoded.role !== 'administration') {
+          console.error("Role does not match required permissions.");
+          this.$router.push("/login")
+        }
+        else
+        {
+          this.fetchShelfData()
+        }
+      }
+      else
+      {
+        console.error("Role does not match required permissions.");
+        this.$router.push('/login');
+      }
+    },
     fetchShelfData() {
+
       axios.get(`http://localhost:8080/instock`)
           .then(response => {
             this.shelfData = response.data.map(shelf => ({
@@ -130,6 +153,10 @@ export default {
             console.error('Failed to update shelf: ', error);
             alert('Failed to update shelf!');
           });
+    },
+    logout() {
+      localStorage.removeItem('token');  // Remove the token
+      this.$router.push('/login');  // Redirect to login page
     }
   }
 }
